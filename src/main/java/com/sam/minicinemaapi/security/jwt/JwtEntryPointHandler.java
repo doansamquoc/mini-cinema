@@ -27,6 +27,6 @@ public class JwtEntryPointHandler implements AuthenticationEntryPoint {
             AuthenticationException ae
     ) throws IOException {
         log.error("Unauthorized: {}", ae.getMessage());
-        responder.sendError(request, response, ErrorCode.UNAUTHORIZED, request.getRequestURI());
+        responder.sendError(response, ErrorCode.UNAUTHORIZED, request.getRequestURI());
     }
 }

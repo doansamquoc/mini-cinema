@@ -5,8 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Map;
-
 @Getter
 @FieldDefaults(level = AccessLevel.PACKAGE, makeFinal = true)
 public class BusinessException extends RuntimeException {

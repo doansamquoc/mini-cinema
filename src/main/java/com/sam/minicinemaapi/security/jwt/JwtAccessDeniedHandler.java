@@ -27,6 +27,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             AccessDeniedException ade
     ) throws IOException {
         log.error("Access denied: {}", ade.getMessage());
-        responder.sendError(request, response, ErrorCode.ACCESS_DENIED, request.getRequestURI());
+        responder.sendError(response, ErrorCode.ACCESS_DENIED, request.getRequestURI());
     }
 }

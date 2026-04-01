@@ -25,7 +25,6 @@ public class AuthResponder {
     MessageSource messageSource;
 
     public void sendError(
-            HttpServletRequest servletRequest,
             HttpServletResponse servletResponse,
             ErrorCode errorCode,
             String path
