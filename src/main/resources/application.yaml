@@ -21,3 +21,4 @@ app:
   secret-key: 8d46a5159527e98043092e5fb95f1b88f28e3918dfdf8171a820eff88664b88a
   refresh-token-expiration: 604800000
   access-token-expiration: 604800000
+  production: false

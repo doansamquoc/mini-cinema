@@ -16,5 +16,5 @@ public class AppProperties {
     String secretKey;
     long refreshTokenExpiration;
     long accessTokenExpiration;
-
+    boolean isProduction;
 }

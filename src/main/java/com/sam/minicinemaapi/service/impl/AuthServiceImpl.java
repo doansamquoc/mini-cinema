@@ -6,12 +6,14 @@ import com.sam.minicinemaapi.dto.request.AuthenticateRequest;
 import com.sam.minicinemaapi.dto.request.UserRegistrationRequest;
 import com.sam.minicinemaapi.dto.response.AuthResponse;
 import com.sam.minicinemaapi.dto.response.UserResponse;
+import com.sam.minicinemaapi.entity.RefreshToken;
 import com.sam.minicinemaapi.entity.User;
 import com.sam.minicinemaapi.exception.BusinessException;
 import com.sam.minicinemaapi.mapper.UserMapper;
 import com.sam.minicinemaapi.security.jwt.JwtProvider;
 import com.sam.minicinemaapi.security.model.UserPrincipal;
 import com.sam.minicinemaapi.service.AuthService;
+import com.sam.minicinemaapi.service.RefreshTokenService;
 import com.sam.minicinemaapi.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
     UserService userService;
     PasswordEncoder encoder;
     AuthenticationManager manager;
+    RefreshTokenService refreshTokenService;
 
     private UserPrincipal authenticate(String identifier, String password) {
         try {
@@ -51,9 +54,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(AuthenticateRequest request) {
         UserPrincipal principal = authenticate(request.identifier(), request.password());
-        String accessToken = generateAccessToken(principal);
+        User user = userService.getReference(principal.getId());
 
-        return new AuthResponse(null, accessToken);
+        String accessToken = generateAccessToken(principal);
+        RefreshToken refreshToken = refreshTokenService.createToken(user);
+
+        return new AuthResponse(refreshToken.getToken(), accessToken);
     }
 
     @Override
@@ -69,6 +75,21 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encoder.encode(request.password()));
 
         return userMapper.toResponse(userService.createUser(user));
+    }
+
+    @Override
+    public AuthResponse refresh(String token) {
+        RefreshToken oldToken = refreshTokenService.findByToken(token);
+        if (oldToken.isExpired()) throw new BusinessException(ErrorCode.INVALID_TOKEN);
+        refreshTokenService.revoke(token);
+
+        User user = oldToken.getUser();
+        UserPrincipal userPrincipal = UserPrincipal.create(user);
+
+        String newAccessToken = generateAccessToken(userPrincipal);
+        RefreshToken newRefreshToken = refreshTokenService.createToken(user);
+
+        return new AuthResponse(newRefreshToken.getToken(), newAccessToken);
     }
 
     private String generateAccessToken(UserPrincipal principal) {

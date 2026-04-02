@@ -6,6 +6,8 @@ import com.sam.minicinemaapi.entity.User;
 public interface UserService {
     User findByIdentifier(String identifier);
 
+    User getReference(Long userId);
+
     User createUser(User user);
 
     boolean existsByPhoneNumber(String phoneNumber);

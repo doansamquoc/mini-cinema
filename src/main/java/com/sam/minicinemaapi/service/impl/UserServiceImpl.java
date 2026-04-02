@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getReference(Long userId) {
+        return repository.getReferenceById(userId);
+    }
+
+    @Override
     public User createUser(User user) {
         return repository.save(user);
     }
