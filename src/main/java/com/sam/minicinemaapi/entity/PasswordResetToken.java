@@ -13,20 +13,14 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "refresh_tokens")
+@Table(name = "password_reset_tokens")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RefreshToken extends BaseEntity {
+public class PasswordResetToken extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
-
-    @Column(name = "token", nullable = false)
     String token;
-
-    @Column(name = "expires_at")
     Instant expiresAt;
-
-    @Column(name = "revoked")
     Boolean revoked;
 
     public void revoke() {
@@ -37,7 +31,7 @@ public class RefreshToken extends BaseEntity {
         return this.revoked;
     }
 
-    public boolean isExpired() {
+    public boolean expired() {
         return this.expiresAt.isBefore(Instant.now());
     }
 }

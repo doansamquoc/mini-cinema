@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -19,9 +21,25 @@ public class UserServiceImpl implements UserService {
     UserRepository repository;
 
     @Override
+    public void updatePassword(User user, String newHashedPassword) {
+        user.setPassword(newHashedPassword);
+        repository.save(user);
+    }
+
+    @Override
     public User findByIdentifier(String identifier) {
         return repository.findByIdentifier(identifier)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
+    }
+
+    @Override
+    public Optional<User> findOptionByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     @Override

@@ -20,6 +20,7 @@ public enum ErrorCode {
     ACCOUNT_EXPIRED(HttpStatus.UNAUTHORIZED, "auth.error.account_expired"),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "auth.error.token_expired"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "auth.error.invalid_token"),
+    TOKEN_REVOKED(HttpStatus.UNAUTHORIZED, "auth.error.token_revoked"),
 
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "error.resource_not_found"),
     RESOURCE_CONFLICT(HttpStatus.CONFLICT, "error.resource_conflict");

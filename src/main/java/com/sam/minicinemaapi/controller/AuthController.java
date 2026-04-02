@@ -3,6 +3,8 @@ package com.sam.minicinemaapi.controller;
 import com.sam.minicinemaapi.constant.EndpointConstant;
 import com.sam.minicinemaapi.dto.common.SuccessResponse;
 import com.sam.minicinemaapi.dto.request.AuthenticateRequest;
+import com.sam.minicinemaapi.dto.request.ForgotPasswordRequest;
+import com.sam.minicinemaapi.dto.request.ResetPasswordRequest;
 import com.sam.minicinemaapi.dto.request.UserRegistrationRequest;
 import com.sam.minicinemaapi.dto.response.AuthResponse;
 import com.sam.minicinemaapi.dto.response.UserResponse;
@@ -43,5 +45,17 @@ public class AuthController {
         AuthResponse response = authService.refresh(token);
         String cookie = cookieService.createRefreshCookie(response.refreshToken()).toString();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie).body(SuccessResponse.ofData(response.accessToken()));
+    }
+
+    @PostMapping("/reset-request")
+    ResponseEntity<SuccessResponse<String>> resetRequest(@Valid @RequestBody ForgotPasswordRequest request) {
+        authService.requestReset(request);
+        return ResponseEntity.ok().body(SuccessResponse.ofMessage("We have sent an verify email to " + request.email()));
+    }
+
+    @PostMapping("/reset-password")
+    ResponseEntity<SuccessResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok().body(SuccessResponse.ofMessage("Your account of password has been changed"));
     }
 }

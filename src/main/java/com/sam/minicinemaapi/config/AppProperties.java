@@ -16,5 +16,9 @@ public class AppProperties {
     String secretKey;
     long refreshTokenExpiration;
     long accessTokenExpiration;
+    long passwordResetTokenExpiration;
     boolean isProduction;
+    String emailFrom;
+    String emailReplyTo;
+    String frontendUrl;
 }
