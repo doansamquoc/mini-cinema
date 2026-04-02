@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
+    UNKNOWN(HttpStatus.INTERNAL_SERVER_ERROR, "system.error.unknown_occurred"),
+
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "auth.error.unauthorized"),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "auth.error.access_denied"),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "auth.error.invalid_credentials"),
